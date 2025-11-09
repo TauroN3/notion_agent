@@ -1,0 +1,27 @@
+{
+  "name": "notion-shell-agent",
+  "version": "1.0.0",
+  "description": "Minimal MCP server wrapping Claude Agent SDK with notion API skill",
+  "main": "mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node mcp-server.js",
+    "dev": "node --watch mcp-server.js"
+  },
+  "keywords": [
+    "task",
+    "notes",
+    "agent",
+    "notion"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.0",
+    "@modelcontextprotocol/sdk": "^1.21.1",
+    "express": "^4.19.0"
+  }
+}
