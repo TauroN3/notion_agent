@@ -5,6 +5,9 @@
 - Formatted output?
 - Log curl commands?
 
-## 7.12.26
+## 5.1.26
+- taking different approach
+
+## 7.12.25
 - Added action's cost on the output
 - Added subagents for more fine-grained task execution
