@@ -1,34 +1,45 @@
-name: Docker Image CI
+name: Build and Push Docker Image to Docker Hub
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # Triggers the workflow on pushes to the main branch
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ] # Also runs on pull requests targeting main
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v5
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: notion_agent:latest
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Step 1: Check out the source code
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }} # Step 2: Authenticate to Docker Hub
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3 # Step 3: Set up Buildx for advanced features like multi-platform builds
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }} # Define the image name
+        tags: |
+          type=branch,enable=false # Disable branch name tags for main branch
+          type=semver,pattern={{version}}
+          type=raw,value=latest,enable={{is_default}} # Use 'latest' for default branch
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: . # Build context is the current directory (where the Dockerfile is located)
+        file: ./Dockerfile # Path to your Dockerfile
+        push: ${{ github.event_name != 'pull_request' }} # Only pushes on actual pushes, not PRs
+        tags: ${{ steps.meta.outputs.tags }} # Apply the generated tags
+        labels: ${{ steps.meta.outputs.labels }} # Apply the generated labels
+        cache-from: type=gha # Optional: Use GitHub Actions cache for faster builds
+        cache-to: type=gha,mode=max # Optional: Cache the built layers
