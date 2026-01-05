@@ -28,10 +28,6 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }} # Define the image name
-        tags: |
-          type=branch,enable=false # Disable branch name tags for main branch
-          type=semver,pattern={{version}}
-          type=raw,value=latest,enable={{is_default}} # Use 'latest' for default branch
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
