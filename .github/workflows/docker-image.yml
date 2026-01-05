@@ -27,7 +27,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }} # Define the image name
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO_NAME }} # Define the image name
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
