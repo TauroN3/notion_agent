@@ -11,9 +11,9 @@ Agents:
 Skills:
 - read-data-notion-api
 - write-data-notion-api
-- notion-api (legacy, will be removed after confirming that splitting the skill is stable)
+- notion-api (inactive - legacy, will be removed after confirming that splitting the skill is stable)
 - notion-formatter (TBD)
-- notion-rate-limit-gatekeeper (TBD)
+- notion-rate-limit-gatekeeper
 
 Tools:
 - none
